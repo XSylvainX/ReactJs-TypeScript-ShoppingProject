@@ -42,7 +42,7 @@ const App = () => {
 
   const getTotalItems = () => null;
 
-  const addToCart = () => null;
+  const addToCart = (clickableItem: CartItem) => null;
 
   const removeFromCart = () => null;
 
