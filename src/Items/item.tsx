@@ -1,9 +1,9 @@
-//import Button from '@mui/core/Button';
 
-// Types
 
 import Button from '@mui/material/Button';
-import { CartItem } from '../App';
+
+// Types
+import { typeCartItem } from '../App';
 
 
 // Styles
@@ -12,8 +12,8 @@ import { Wrapper } from './item.styles'
 
 
 type Props = {
-    item: CartItem;
-    addToCart: (clickableItem: CartItem) => void
+    item: typeCartItem;
+    addToCart: (clickableItem: typeCartItem) => void
 }
 
 
@@ -26,7 +26,7 @@ const Item: React.FunctionComponent<Props> = ({ item, addToCart }) => (
             <p>{item.description}</p>
             <h3>{item.price}</h3>
         </div>
-        <Button onClick={() => addToCart(item)}>Add</Button>
+        <Button onClick={() => addToCart(item)}>Add to cart</Button>
     </Wrapper>
 )
 

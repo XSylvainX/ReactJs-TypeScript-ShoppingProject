@@ -1,8 +1,19 @@
 import styled from "@emotion/styled";
+import IconButton from "@mui/material/IconButton";
 
 
-const Wrapper = styled('div')`
+export const Wrapper = styled('div')`
+
+margin: 40px; 
+
+`
+
+export const ButtonStyle = styled(IconButton)`
+position : fixed;
+z-index : 100;
+right:20px;
+top:20px;
+
 `
 
 
-export default Wrapper

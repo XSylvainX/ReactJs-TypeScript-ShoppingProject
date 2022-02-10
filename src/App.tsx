@@ -1,50 +1,86 @@
-import React from 'react';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 
 // Material Components 
-import Item from './items/item';
-import Drawer from '@mui/material';
+import Item from './Items/item';
+import Cart from './Cart/Cart'
+
+
+import Drawer from '@mui/material/Drawer';
 import LinearProgress from '@mui/material/LinearProgress';
 import Grid from '@mui/material/Grid';
-import AddShoppingCart from '@mui/icons-material';
-import Badge from '@mui/icons-material';
+import AddShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Badge from '@mui/material/Badge';
 
 // Styles 
 
-import Wrapper from './App.styles';
+import { Wrapper, ButtonStyle } from './App.styles';
 
 // Types
 
-export type CartItem = {
+export type typeCartItem = {
   id: number;
   title: string;
   price: number;
   category: string;
   description: string;
-  image: string
+  image: string;
+  amount: number
 }
 
 
-const getProducts = async (): Promise<CartItem[]> =>
+const getProducts = async (): Promise<typeCartItem[]> =>
   await (await fetch('https://fakestoreapi.com/products')).json()
 
 
 
 const App = () => {
 
-
-  const { data, isLoading, error } = useQuery<CartItem[]>(
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([] as typeCartItem[]);
+  const { data, isLoading, error } = useQuery<typeCartItem[]>(
     'products',
     getProducts);
 
   console.log(data);
 
-  const getTotalItems = () => null;
+  const getTotalItems = (items: typeCartItem[]) =>
+    items.reduce((acc: number, item) => acc + item.amount, 0);
 
-  const addToCart = (clickableItem: CartItem) => null;
 
-  const removeFromCart = () => null;
+  const addToCart = (clickableItem: typeCartItem) => {
+    setCartItems(prev => {
+      // item already in the cart ?
+      const itemInCard = prev.find(item => item.id === clickableItem.id)
+
+      if (itemInCard) {
+        return prev.map(item =>
+          //if exist update item
+          item.id === clickableItem.id ? { ...item, amount: item.amount + 1 }
+            : item
+        );
+      }
+
+      // item added first time
+      return [...prev, { ...clickableItem, amount: 1 }]
+
+    })
+  };
+
+  const removeFromCart = (id: number) => {
+    setCartItems(prev =>
+      prev.reduce((acc, item) => {
+        // check item id
+        if (item.id === id) {
+          // if item amount = 1 return acc otherwise return new array soustract by 1
+          if (item.amount === 1) return acc;
+          return [...acc, { ...item, amount: item.amount - 1 }];
+        } else {
+          return [...acc, item];
+        }
+      }, [] as typeCartItem[])
+    );
+  };
 
 
   if (isLoading) return <LinearProgress />;
@@ -53,6 +89,14 @@ const App = () => {
 
   return (
     <Wrapper>
+      <Drawer anchor='right' open={cartOpen} onClose={() => setCartOpen(false)}>
+        <Cart cartItems={cartItems} addToCart={addToCart} removeFromCart={removeFromCart} />
+      </Drawer>
+      <ButtonStyle onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={getTotalItems(cartItems)} color='error'>
+          <AddShoppingCartIcon />
+        </Badge>
+      </ButtonStyle>
       <Grid container spacing={3}>
         {data?.map(item => (
           <Grid item key={item.id} xs={12} sm={4}>
