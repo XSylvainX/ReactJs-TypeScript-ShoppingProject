@@ -2,12 +2,13 @@
 
 // Types
 
+import Button from '@mui/material/Button';
 import { CartItem } from '../App';
 
 
 // Styles
 
-import Wrapper from './item.styles'
+import { Wrapper } from './item.styles'
 
 
 type Props = {
@@ -25,5 +26,8 @@ const Item: React.FunctionComponent<Props> = ({ item, addToCart }) => (
             <p>{item.description}</p>
             <h3>{item.price}</h3>
         </div>
+        <Button onClick={() => addToCart(item)}>Add</Button>
     </Wrapper>
 )
+
+export default Item;

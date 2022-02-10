@@ -3,16 +3,16 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 
 // Material Components 
-
+import Item from './items/item';
 import Drawer from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
-import Grid from '@mui/material';
+import Grid from '@mui/material/Grid';
 import AddShoppingCart from '@mui/icons-material';
 import Badge from '@mui/icons-material';
 
 // Styles 
 
-import { Wrapper } from './App.styles';
+import Wrapper from './App.styles';
 
 // Types
 
@@ -52,9 +52,16 @@ const App = () => {
   if (error) return <div>There is a problem</div>
 
   return (
-    <div className="App">
-      start
-    </div>
+    <Wrapper>
+      <Grid container spacing={3}>
+        {data?.map(item => (
+          <Grid item key={item.id} xs={12} sm={4}>
+            <Item item={item} addToCart={addToCart} />
+          </Grid>
+        )
+        )}
+      </Grid>
+    </Wrapper>
   );
 }
 
