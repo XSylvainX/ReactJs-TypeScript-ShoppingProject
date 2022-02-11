@@ -19,8 +19,8 @@ const CartItem: React.FunctionComponent<Props> = ({ item, addToCart, removeFromC
         <div>
             <h3>{item.title}</h3>
             <div className='information'>
-                <p>Price: ${item.price}</p>
-                <p>Total: ${(item.amount * item.price).toFixed(2)}</p>
+                <p>Price: €{item.price}</p>
+                <p>Total: €{(item.amount * item.price).toFixed(2)}</p>
             </div>
             <div className='buttons'>
                 <Button
